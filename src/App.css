@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  background-color: rgb(238, 238, 238);
 }
 
 .App-logo {
@@ -10,51 +10,77 @@
 nav {
   border-bottom: #464e5d 2px solid;
 }
-nav ul {
-  list-style-type: none;
-}
-nav ul li a {
- color: white
+
+
+.navbar-dropdown {
+  background-color: white;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-top: 2px solid #dbdbdb;
+  box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1);
+  display: none;
+  font-size: 0.875rem;
+  left: 0;
+  min-width: 100%;
+  position: absolute;
+  top: 100%;
+  z-index: 20;
 }
 
-.list{
+.navbar-item:hover .navbar-dropdown {
+  display: block;
+}
+
+@media screen and (max-width: 1088px) {
+  .navbar-dropdown {
+    display: none;
+  }
+}
+
+.list {
   display: flex;
-    flex-flow: row wrap;
+  flex-flow: row wrap;
   flex-basis: auto;
   justify-content: space-around;
 }
+
 .list-item {
-    padding: 5px;
-    min-width: 200px;
-    min-height: 25px;
-    margin-top: 10px;
-    line-height: 15px;
-    border: black 1px solid;
+  padding: 5px;
+  min-width: 200px;
+  min-height: 25px;
+  margin-top: 10px;
+  line-height: 15px;
+  border: black 1px solid;
 }
+
 .list-item .title {
   font-size: xx-large;
 }
+
 .list-item small {
   border-radius: 5px;
   font-size: medium;
   background: rgba(79, 79, 79, 0.822);
   padding: 2px 5px;
 }
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
 a {
   color: #61dafb;
 }
-.success{
+
+.success {
   background-color: #06ff4446;
   border-radius: 10px;
 }
+
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
   display: flex;
   flex-direction: column;
   font-size: calc(10px + 2vmin);
@@ -69,6 +95,7 @@ a {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

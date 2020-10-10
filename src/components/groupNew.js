@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import OneGroup from "./oneGroup";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-  Redirect,
-} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 function GroupNew() {
   const [error, setError] = useState(null);
@@ -56,14 +48,14 @@ function GroupNew() {
         <div className="edit">
           <h2>Заполните поля группы</h2>
 
-          <p className="success">{success.success}</p>
+          <p className="is-success">{success.success}</p>
 
           <form onSubmit={handleSubmit}>
             <label>
               Название группы:
               <input
                 type="text"
-                value={group.name}
+                value={group.name || ""}
                 onChange={(e) =>
                   setGroups({
                     name: e.target.value,
@@ -77,7 +69,7 @@ function GroupNew() {
             <label>
               Описание:
               <textarea
-                value={group.disc}
+                value={group.disc || ""}
                 onChange={(e) =>
                   setGroups({
                     name: group.name,

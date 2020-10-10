@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import OneGroup from "./oneGroup";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function GroupOne() {
   const [error, setError] = useState(null);
@@ -94,48 +87,75 @@ function GroupOne() {
   } else {
     return (
       <div>
-        <div className="list">
-          <OneGroup prop={group} key={group.id} />
-        </div>
-        <div className="edit">
-          <h2>Редактирвоание группы</h2>
+        <h1 className="title is-2">Информация о группе</h1>
+        <div class="columns">
+          <div class="column">
+            <OneGroup prop={group} key={group.id} />
+          </div>
 
-          <p className="success">{success}</p>
-          <button onClick={handleSubmitDelete}>
-            <i className="material-icons">delete</i> Удалить группу
-          </button>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Название группы:
-              <input
-                type="text"
-                value={group.name}
-                onChange={(e) =>
-                  setGroups({
-                    name: e.target.value,
-                    disc: group.disc,
-                    id: group.id,
-                  })
-                }
-              />
-            </label>
-            <br />
-            <label>
-              Описание:
-              <textarea
-                value={group.disc}
-                onChange={(e) =>
-                  setGroups({
-                    name: group.name,
-                    disc: e.target.value,
-                    id: group.id,
-                  })
-                }
-              />
-            </label>
-            <br />
-            <input type="submit" value="Отправить" />
-          </form>
+          <div className="column">
+            <div className="card m-2">
+              <div className="card-content">
+                <h2 className="title is-4">
+                  Редактирвоание{" "}
+                  <button
+                    className="button is-danger is-small"
+                    onClick={handleSubmitDelete}
+                  >
+                    <i className="material-icons">delete</i>
+                  </button>
+                </h2>
+
+                <p className="notification is-success">{success}</p>
+
+                <form onSubmit={handleSubmit}>
+                  <div class="field">
+                    <label class="label">
+                      Название группы
+                      <div class="control">
+                        <input
+                          class="input"
+                          type="text"
+                          value={group.name || ""}
+                          onChange={(e) =>
+                            setGroups({
+                              name: e.target.value,
+                              disc: group.disc,
+                              id: group.id,
+                            })
+                          }
+                        />
+                      </div>
+                    </label>
+                  </div>
+                  <div class="field">
+                    <label class="label">
+                      Описание
+                      <div class="control">
+                        <textarea
+                          class="textarea"
+                          type="text"
+                          value={group.disc || ""}
+                          onChange={(e) =>
+                            setGroups({
+                              name: group.name,
+                              disc: e.target.value,
+                              id: group.id,
+                            })
+                          }
+                        />
+                      </div>
+                    </label>
+                  </div>
+                  <input
+                    className="button is-success is-left"
+                    type="submit"
+                    value="Отправить"
+                  />
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

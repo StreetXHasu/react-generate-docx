@@ -5,12 +5,12 @@ import List from "../components/groupList";
 export default function GroupList() {
   return (
     <div className="group">
-      <h1>
-        Наши группы{" "}
+      <h1 className="title is-2">
+        Наши группы
         <Link to="/group/new">
-          <button>
-            <i class="material-icons">add</i> Создать группу
-          </button>
+          <span className="button tag is-small is-primary">
+            <i className="material-icons">add</i> Создать группу
+          </span>
         </Link>
       </h1>
       <List />

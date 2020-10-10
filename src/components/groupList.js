@@ -40,8 +40,8 @@ function List() {
   } else {
     return (
       <div>
-        <p>Количество групп: {groups.length}</p>
-        <div className="list">
+        <h2 className="title is-4">Количество групп: {groups.length}</h2>
+        <div className="is-flex">
           {groups.map((group) => (
             <OneGroup prop={group} key={group.id} />
           ))}
