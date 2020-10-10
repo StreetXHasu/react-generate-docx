@@ -1,3 +1,11 @@
+Это часть фронтенда нашего приложения, в это части у нас работа с документами, то есть: Юзеры Документы Группа документов Счета за электричество\воду Чеки об оплате и может что-то ещё.
+
+Суть такая, что юзер забивает в поля всякую информацию и получает документ ворда с заполнеными данными.
+
+Часть с бекендом тут: https://github.com/StreetXHasu/express-generate-docx
+
+Код с стрима StreetX_Hasu https://discord.gg/Fn7fcsV
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
