@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import OneGroup from "./oneGroup";
+import OneGroup from "./oneDoc";
 
-function List() {
+function DocsList() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [groups, setGroups] = useState([]);
@@ -10,7 +10,7 @@ function List() {
   // этот useEffect будет запущен один раз
   // аналогично componentDidMount()
   useEffect(() => {
-    fetch("http://localhost:3001/docs/group/", {
+    fetch("http://localhost:3001/docs/", {
       method: "POST",
       headers: new Headers({
         Authorization:
@@ -40,7 +40,7 @@ function List() {
   } else {
     return (
       <div>
-        <h2 className="title is-4">Количество групп: {groups.length}</h2>
+        <h2 className="title is-4">Количество документов: {groups.length}</h2>
         <div className="columns is-multiline">
           {groups.map((group) => (
             <OneGroup prop={group} key={group.id} />
@@ -51,4 +51,4 @@ function List() {
   }
 }
 
-export default List;
+export default DocsList;

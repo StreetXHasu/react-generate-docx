@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import OneGroup from "./oneGroup";
 import { useParams } from "react-router-dom";
 
-function GroupOne() {
+function DocOne() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [group, setGroups] = useState([]);
+  const [doc, setDoc] = useState([]);
   let { id } = useParams();
   // Примечание: пустой массив зависимостей [] означает, что
   // этот useEffect будет запущен один раз
   // аналогично componentDidMount()
   useEffect(() => {
-    fetch(`http://localhost:3001/docs/group/${id}`, {
+    fetch(`http://localhost:3001/docs/${id}`, {
       method: "POST",
       headers: new Headers({
         Authorization:
@@ -23,11 +23,11 @@ function GroupOne() {
       .then((res) => res.json())
       .then(
         (result) => {
-          if (!result.doc_group) {
+          if (!result.doc) {
             setError({ message: "Нету такой группы" });
           }
           setIsLoaded(true);
-          setGroups(result.doc_group);
+          setDoc(result.doc);
         },
         // Примечание: Обрабатывать ошибки необходимо именно здесь
         // вместо блока catch(), чтобы не пропустить
@@ -41,12 +41,12 @@ function GroupOne() {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    fetch(`http://localhost:3001/docs/group/${id}/edit`, {
+    fetch(`http://localhost:3001/docs/${id}/edit`, {
       method: "POST",
       body: JSON.stringify({
         doc: {
-          name: group.name,
-          disc: group.disc,
+          name: doc.name,
+          disc: doc.disc,
         },
       }),
       headers: new Headers({
@@ -60,12 +60,12 @@ function GroupOne() {
   };
   const handleSubmitDelete = (evt) => {
     evt.preventDefault();
-    fetch(`http://localhost:3001/docs/group/${id}/del`, {
+    fetch(`http://localhost:3001/docs/${id}/del`, {
       method: "POST",
       body: JSON.stringify({
         doc: {
-          name: group.name,
-          disc: group.disc,
+          name: doc.name,
+          disc: doc.disc,
         },
       }),
       headers: new Headers({
@@ -87,10 +87,10 @@ function GroupOne() {
   } else {
     return (
       <div>
-        <h1 className="title is-2">Информация о группе</h1>
+        <h1 className="title is-2">Информация о документе</h1>
         <div className="columns">
           <div className="column">
-            <OneGroup prop={group} key={group.id} />
+            <OneGroup prop={doc} key={doc.id} />
           </div>
 
           <div className="column">
@@ -111,17 +111,17 @@ function GroupOne() {
                 <form onSubmit={handleSubmit}>
                   <div className="field">
                     <label className="label">
-                      Название группы
+                      Название документа
                       <div className="control">
                         <input
                           className="input"
                           type="text"
-                          value={group.name || ""}
+                          value={doc.name || ""}
                           onChange={(e) =>
-                            setGroups({
+                            setDoc({
                               name: e.target.value,
-                              disc: group.disc,
-                              id: group.id,
+                              disc: doc.disc,
+                              id: doc.id,
                             })
                           }
                         />
@@ -135,12 +135,12 @@ function GroupOne() {
                         <textarea
                           className="textarea"
                           type="text"
-                          value={group.disc || ""}
+                          value={doc.disc || ""}
                           onChange={(e) =>
-                            setGroups({
-                              name: group.name,
+                            setDoc({
+                              name: doc.name,
                               disc: e.target.value,
-                              id: group.id,
+                              id: doc.id,
                             })
                           }
                         />
@@ -162,4 +162,4 @@ function GroupOne() {
   }
 }
 
-export default GroupOne;
+export default DocOne;

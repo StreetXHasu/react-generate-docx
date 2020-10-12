@@ -1,23 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 
-function GroupNew() {
+function DocNew() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState("");
   const [isRedirect, setIsRedirect] = useState(false);
   const [group, setGroups] = useState([]);
+  const [doc, setDoc] = useState([]);
   // Примечание: пустой массив зависимостей [] означает, что
   // этот useEffect будет запущен один раз
   // аналогично componentDidMount()
 
+  useEffect(() => {
+    fetch(`http://localhost:3001/docs/group/`, {
+      method: "POST",
+      headers: new Headers({
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
+        "Content-Type": "application/json",
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log("Группы", result);
+        setGroups(result.docs.map(({ id, name }) => ({ id, name })));
+      });
+  }, []);
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    fetch(`http://localhost:3001/docs/group/new`, {
+    fetch(`http://localhost:3001/docs/new`, {
       method: "POST",
       body: JSON.stringify({
         doc: {
-          name: group.name,
-          disc: group.disc,
+          name: doc.name,
+          disc: doc.disc,
+          groupId: doc.groupId,
         },
       }),
       headers: new Headers({
@@ -41,34 +59,61 @@ function GroupNew() {
     return <div>Ошибка: {error.message}</div>;
   } else {
     if (isRedirect) {
-      return <Redirect to={`/group/${success.doc.id}`} />;
+      return <Redirect to={`/docs/${success.doc.id}`} />;
     }
     return (
       <div>
         <div className="column">
           <div className="card m-6">
             <div className="card-content">
-              <h2 className="title is-4">Введите данные группы</h2>
+              <h2 className="title is-4">Введите данные документа</h2>
 
               <p className="notification is-success">{success.success}</p>
 
               <form onSubmit={handleSubmit}>
                 <div className="field">
                   <label className="label">
-                    Название группы
+                    Название документа
                     <div className="control">
                       <input
                         className="input"
                         type="text"
-                        value={group.name || ""}
+                        value={doc.name || ""}
                         onChange={(e) =>
-                          setGroups({
+                          setDoc({
+                            ...doc,
                             name: e.target.value,
-                            disc: group.disc,
-                            id: group.id,
                           })
                         }
                       />
+                    </div>
+                  </label>
+                </div>
+                <div className="field">
+                  <label className="label">
+                    Группа
+                    <div className="control">
+                      <select
+                        required
+                        className="select"
+                        type="text"
+                        value={doc.disc || ""}
+                        onChange={(e) =>
+                          setDoc({
+                            ...doc,
+                            groupId: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="" key="0" disabled hidden>
+                          Нужно выбрать группу из списка
+                        </option>
+                        {group.map((item) => (
+                          <option value={item.id} key={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </label>
                 </div>
@@ -79,12 +124,11 @@ function GroupNew() {
                       <textarea
                         className="textarea"
                         type="text"
-                        value={group.disc || ""}
+                        value={doc.disc || ""}
                         onChange={(e) =>
-                          setGroups({
-                            name: group.name,
+                          setDoc({
+                            ...doc,
                             disc: e.target.value,
-                            id: group.id,
                           })
                         }
                       />
@@ -105,4 +149,4 @@ function GroupNew() {
   }
 }
 
-export default GroupNew;
+export default DocNew;

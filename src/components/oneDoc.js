@@ -1,15 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Group({ prop }) {
+function Doc({ prop }) {
   return (
     <div className="card m-2">
       <div className="card-content">
         <div className="media">
           <div className="media-content">
             <p className="title is-4">
-              <Link to={"/group/" + prop.id}>{prop.name}</Link> <small></small>
+              <Link to={"/docs/" + prop.id}>{prop.name}</Link> <small></small>
               <span className="tag is-light">{prop.id}</span>
+              <span className="tag is-dark">{prop.docs_groupId}</span>
             </p>
           </div>
         </div>
@@ -19,4 +20,4 @@ function Group({ prop }) {
   );
 }
 
-export default Group;
+export default Doc;
