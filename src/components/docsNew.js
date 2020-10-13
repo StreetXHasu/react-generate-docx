@@ -97,7 +97,6 @@ function DocNew() {
                         required
                         className="select"
                         type="text"
-                        value={doc.disc || ""}
                         onChange={(e) =>
                           setDoc({
                             ...doc,
@@ -105,7 +104,7 @@ function DocNew() {
                           })
                         }
                       >
-                        <option value="" key="0" disabled hidden>
+                        <option value="" key="sdf" hidden>
                           Нужно выбрать группу из списка
                         </option>
                         {group.map((item) => (

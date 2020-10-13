@@ -12,18 +12,19 @@ function GroupNew() {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
+
+    const data = new FormData();
+    data.append("name", group.name);
+    data.append("disc", group.disc);
+    data.append("img", group.img);
+    console.log(data);
     fetch(`http://localhost:3001/docs/group/new`, {
       method: "POST",
-      body: JSON.stringify({
-        doc: {
-          name: group.name,
-          disc: group.disc,
-        },
-      }),
+      body: data,
       headers: new Headers({
         Authorization:
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data; boundary=boundary",
       }),
     })
       .then((response) => response.json())
@@ -63,13 +64,37 @@ function GroupNew() {
                         value={group.name || ""}
                         onChange={(e) =>
                           setGroups({
+                            ...group,
                             name: e.target.value,
-                            disc: group.disc,
-                            id: group.id,
                           })
                         }
                       />
                     </div>
+                  </label>
+                </div>
+                <div className="file has-name">
+                  <label className="file-label">
+                    <input
+                      className="file-input"
+                      onChange={(e) =>
+                        setGroups({
+                          ...group,
+                          img: e.target.files[0],
+                          imgName: e.target.files[0].name,
+                        })
+                      }
+                      type="file"
+                      name="resume"
+                    />
+                    <span className="file-cta">
+                      <span className="file-icon">
+                        <i className="fas fa-upload"></i>
+                      </span>
+                      <span className="file-label">Выбрать картинку</span>
+                    </span>
+                    <span className="file-name">
+                      {group.imgName || "формат .png .jpg .gif"}
+                    </span>
                   </label>
                 </div>
                 <div className="field">
@@ -82,9 +107,8 @@ function GroupNew() {
                         value={group.disc || ""}
                         onChange={(e) =>
                           setGroups({
-                            name: group.name,
+                            ...group,
                             disc: e.target.value,
-                            id: group.id,
                           })
                         }
                       />
