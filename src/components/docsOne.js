@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import OneGroup from "./oneGroup";
+import OneDoc from "./oneDoc";
 import { useParams } from "react-router-dom";
 
 function DocOne() {
@@ -90,7 +90,7 @@ function DocOne() {
         <h1 className="title is-2">Информация о документе</h1>
         <div className="columns">
           <div className="column">
-            <OneGroup prop={doc} key={doc.id} />
+            <OneDoc prop={doc} key={doc.id} />
           </div>
 
           <div className="column">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import makeRequest from "./makeRequest";
 import OneGroup from "./oneGroup";
 import { useParams } from "react-router-dom";
 
@@ -12,72 +13,56 @@ function GroupOne() {
   // этот useEffect будет запущен один раз
   // аналогично componentDidMount()
   useEffect(() => {
-    fetch(`http://localhost:3001/docs/group/${id}`, {
-      method: "POST",
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/x-www-form-urlencoded",
-      }),
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          if (!result.doc_group) {
+    makeRequest("POST", `http://localhost:3001/docs/group/${id}`).then(
+      ({ data, ok, error }) => {
+        if (ok) {
+          if (!data.doc_group) {
             setError({ message: "Нету такой группы" });
           }
-          setIsLoaded(true);
-          setGroups(result.doc_group);
-        },
-        // Примечание: Обрабатывать ошибки необходимо именно здесь
-        // вместо блока catch(), чтобы не пропустить
-        // исключения из реальных ошибок в компонентах.
-        (error) => {
-          setIsLoaded(true);
+          setGroups(data.doc_group);
+        } else {
           setError(error);
         }
-      );
+        setIsLoaded(true);
+      }
+    );
   }, [id]);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    fetch(`http://localhost:3001/docs/group/${id}/edit`, {
-      method: "POST",
-      body: JSON.stringify({
-        doc: {
-          name: group.name,
-          disc: group.disc,
-        },
-      }),
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/json",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => setSuccess(data.success));
+    const data = new FormData();
+    data.append("name", group.name);
+    data.append("disc", group.disc);
+    makeRequest(
+      "POST",
+      `http://localhost:3001/docs/group/${id}/edit`,
+      data
+    ).then(({ data, ok, error }) => {
+      if (ok) {
+        setSuccess(data.success);
+      } else {
+        setError(error);
+      }
+      setIsLoaded(true);
+    });
   };
   const handleSubmitDelete = (evt) => {
     evt.preventDefault();
-    fetch(`http://localhost:3001/docs/group/${id}/del`, {
-      method: "POST",
-      body: JSON.stringify({
-        doc: {
-          name: group.name,
-          disc: group.disc,
-        },
-      }),
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/json",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setError({ message: data.success });
-      });
+    const data = new FormData();
+    data.append("name", group.name);
+    data.append("disc", group.disc);
+    makeRequest(
+      "POST",
+      `http://localhost:3001/docs/group/${id}/del`,
+      data
+    ).then(({ data, ok, error }) => {
+      if (ok) {
+        setSuccess(data.success);
+      } else {
+        setError(error);
+      }
+      setIsLoaded(true);
+    });
   };
 
   if (error) {
@@ -155,6 +140,38 @@ function GroupOne() {
                 </form>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="card m-2">
+          <div className="card-content">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Документ</th>
+                  <th>Описание</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>ID</th>
+                  <th>Документ</th>
+                  <th>Описание</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                <tr>
+                  <th>1</th>
+                  <td>81</td>
+                  <td>Qualification for the </td>
+                </tr>
+                <tr>
+                  <th>1</th>
+                  <td>81</td>
+                  <td>Qualification for the </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

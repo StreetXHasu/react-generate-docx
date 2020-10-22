@@ -1,45 +1,44 @@
 import React, { useState } from "react";
+import makeRequest from "./makeRequest";
 import { Redirect } from "react-router-dom";
 
 function GroupNew() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState("");
   const [isRedirect, setIsRedirect] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const [group, setGroups] = useState([]);
   // Примечание: пустой массив зависимостей [] означает, что
   // этот useEffect будет запущен один раз
   // аналогично componentDidMount()
 
   const handleSubmit = (evt) => {
+    setIsLoaded(false);
     evt.preventDefault();
 
     const data = new FormData();
     data.append("name", group.name);
     data.append("disc", group.disc);
-    data.append("img", group.img);
-    console.log(data);
-    fetch(`http://localhost:3001/docs/group/new`, {
-      method: "POST",
-      body: data,
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "multipart/form-data; boundary=boundary",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setSuccess(data);
+    data.append("avatar", group.img);
 
-        setInterval(() => {
+    makeRequest("POST", "http://localhost:3001/docs/group/new", data).then(
+      ({ data, ok, error }) => {
+        if (ok) {
+          console.log("тест ", data);
+          setSuccess(data);
           setIsRedirect(true);
-        }, 3000);
-      })
-      .catch((error) => setError(error));
+        } else {
+          setError({ message: ` ${error}` });
+        }
+        setIsLoaded(true);
+      }
+    );
   };
 
   if (error) {
     return <div>Ошибка: {error.message}</div>;
+  } else if (!isLoaded) {
+    return <div>Загрузка...</div>;
   } else {
     if (isRedirect) {
       return <Redirect to={`/group/${success.doc.id}`} />;
