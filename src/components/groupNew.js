@@ -8,9 +8,6 @@ function GroupNew() {
   const [isRedirect, setIsRedirect] = useState(false);
   const [isLoaded, setIsLoaded] = useState(true);
   const [group, setGroups] = useState([]);
-  // Примечание: пустой массив зависимостей [] означает, что
-  // этот useEffect будет запущен один раз
-  // аналогично componentDidMount()
 
   const handleSubmit = (evt) => {
     setIsLoaded(false);

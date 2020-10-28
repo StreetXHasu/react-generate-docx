@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import makeRequest from "./makeRequest";
 import { Redirect } from "react-router-dom";
 
 function DocNew() {
@@ -7,52 +8,44 @@ function DocNew() {
   const [isRedirect, setIsRedirect] = useState(false);
   const [group, setGroups] = useState([]);
   const [doc, setDoc] = useState([]);
-  // Примечание: пустой массив зависимостей [] означает, что
-  // этот useEffect будет запущен один раз
-  // аналогично componentDidMount()
 
   useEffect(() => {
-    fetch(`http://localhost:3001/docs/group/`, {
-      method: "POST",
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/json",
-      }),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log("Группы", result);
-        setGroups(result.docs.map(({ id, name }) => ({ id, name })));
-      });
+    makeRequest(
+      "POST",
+      `http://localhost:3001/docs/group/`,
+      {},
+      "application/x-www-form-urlencoded"
+    ).then(({ data, ok, error }) => {
+      if (ok) {
+        setGroups(data.docs.map(({ id, name }) => ({ id, name })));
+      } else {
+        setError(error);
+      }
+    });
   }, []);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    fetch(`http://localhost:3001/docs/new`, {
-      method: "POST",
-      body: JSON.stringify({
-        doc: {
-          name: doc.name,
-          disc: doc.disc,
-          groupId: doc.groupId,
-        },
-      }),
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/json",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    let data = JSON.stringify({
+      doc: {
+        name: doc.name,
+        disc: doc.disc,
+        groupId: doc.groupId,
+      },
+    });
+    makeRequest(
+      "POST",
+      `http://localhost:3001/docs/new`,
+      data,
+      "application/json"
+    ).then(({ data, ok, error }) => {
+      if (ok) {
         setSuccess(data);
-
-        setInterval(() => {
-          setIsRedirect(true);
-        }, 3000);
-      })
-      .catch((error) => setError(error));
+        setIsRedirect(true);
+      } else {
+        setError(error);
+      }
+    });
   };
 
   if (error) {

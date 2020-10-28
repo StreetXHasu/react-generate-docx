@@ -2,6 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Home from "./pages/home";
+import UserPage from "./pages/user";
+import UserReg from "./pages/userReg";
+import UserLogin from "./pages/userLogin";
+import UserLogout from "./pages/userLogout";
 import GroupList from "./pages/groupList";
 import GroupNew from "./pages/groupNew";
 import GroupOne from "./pages/groupOne";
@@ -42,8 +46,18 @@ function App() {
               <Route path="/docs">
                 <DocsList />
               </Route>
-              <Route path="/">
-                <Home />
+              <Route path="/login">
+                <UserLogin />
+              </Route>
+              <Route path="/logout">
+                <UserLogout />
+              </Route>
+
+              <Route path="/reg">
+                <UserReg />
+              </Route>
+              <Route path="/user">
+                <UserPage />
               </Route>
             </Switch>
           </div>

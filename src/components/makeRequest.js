@@ -1,12 +1,31 @@
-async function makeRequest(method, url, data = {}) {
+function getCookieValue(a) {
+  var b = document.cookie.match("(^|;)\\s*" + a + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+}
+
+async function makeRequest(method, url, data = {}, contentType = "") {
   try {
+    let Head = {};
+    let Token = getCookieValue("token");
+    if (Token.length >= 1) {
+      Token = `Bearer ${Token}`;
+    }
+    if (contentType) {
+      //КОСТЫЛЬ 90 уровня
+      Head = new Headers({
+        Authorization: `${Token}`,
+        "Content-Type": contentType,
+      });
+    } else {
+      Head = new Headers({
+        Authorization: `${Token}`,
+      });
+    }
+
     const response = await fetch(url, {
       method: `${method}`,
       body: data,
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-      }),
+      headers: Head,
     });
 
     if (!response.ok) {

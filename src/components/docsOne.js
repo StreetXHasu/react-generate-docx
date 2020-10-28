@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import makeRequest from "./makeRequest";
 import OneDoc from "./oneDoc";
 import { useParams } from "react-router-dom";
 
@@ -12,72 +13,68 @@ function DocOne() {
   // этот useEffect будет запущен один раз
   // аналогично componentDidMount()
   useEffect(() => {
-    fetch(`http://localhost:3001/docs/${id}`, {
-      method: "POST",
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/x-www-form-urlencoded",
-      }),
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          if (!result.doc) {
-            setError({ message: "Нету такой группы" });
-          }
-          setIsLoaded(true);
-          setDoc(result.doc);
-        },
-        // Примечание: Обрабатывать ошибки необходимо именно здесь
-        // вместо блока catch(), чтобы не пропустить
-        // исключения из реальных ошибок в компонентах.
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
+    makeRequest(
+      "POST",
+      `http://localhost:3001/docs/${id}`,
+      {},
+      "application/x-www-form-urlencoded"
+    ).then(({ data, ok, error }) => {
+      if (ok) {
+        if (!data.doc) {
+          setError({ message: "Нету такой группы" });
         }
-      );
+        setIsLoaded(true);
+        setDoc(data.doc);
+      } else {
+        setError(error);
+      }
+      setIsLoaded(true);
+    });
   }, [id]);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    fetch(`http://localhost:3001/docs/${id}/edit`, {
-      method: "POST",
-      body: JSON.stringify({
-        doc: {
-          name: doc.name,
-          disc: doc.disc,
-        },
-      }),
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/json",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => setSuccess(data.success));
+    let data = JSON.stringify({
+      doc: {
+        name: doc.name,
+        disc: doc.disc,
+      },
+    });
+    makeRequest(
+      "POST",
+      `http://localhost:3001/docs/${id}/edit`,
+      data,
+      "application/json"
+    ).then(({ data, ok, error }) => {
+      if (ok) {
+        setSuccess({ message: data.success });
+      } else {
+        setError(error);
+      }
+      setIsLoaded(true);
+    });
   };
   const handleSubmitDelete = (evt) => {
     evt.preventDefault();
-    fetch(`http://localhost:3001/docs/${id}/del`, {
-      method: "POST",
-      body: JSON.stringify({
-        doc: {
-          name: doc.name,
-          disc: doc.disc,
-        },
-      }),
-      headers: new Headers({
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTk4MDIzOTk0fQ.qalGYUk1DWF0IT-VAiXwG2Gowe0WgHGjTfNJ2mlu_hw",
-        "Content-Type": "application/json",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    let data = JSON.stringify({
+      doc: {
+        name: doc.name,
+        disc: doc.disc,
+      },
+    });
+    makeRequest(
+      "POST",
+      `http://localhost:3001/docs/${id}/del`,
+      data,
+      "application/json"
+    ).then(({ data, ok, error }) => {
+      if (ok) {
         setError({ message: data.success });
-      });
+      } else {
+        setError(error);
+      }
+      setIsLoaded(true);
+    });
   };
 
   if (error) {

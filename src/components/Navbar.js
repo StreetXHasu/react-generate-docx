@@ -2,6 +2,40 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../logo.svg";
 
+function getCookieValue(a) {
+  var b = document.cookie.match("(^|;)\\s*" + a + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+}
+function Ghost() {
+  return (
+    <div className="buttons">
+      <Link className="button is-primary" to="/reg">
+        <strong>Регистрация</strong>
+      </Link>
+      <Link className="button is-light" to="/login">
+        Вход
+      </Link>
+    </div>
+  );
+}
+function Login() {
+  return (
+    <div className="buttons">
+      <Link className="button is-primary" to="/user">
+        <strong>Юзвер</strong>
+      </Link>
+      <Link className="button" to="/logout">
+        <strong>выйти</strong>
+      </Link>
+    </div>
+  );
+}
+function Greeting() {
+  if (getCookieValue("token").length >= 1) {
+    return <Login />;
+  }
+  return <Ghost />;
+}
 function Navbar() {
   return (
     <header className="App-header">
@@ -10,12 +44,8 @@ function Navbar() {
           <Link className="navbar-item" to="/">
             <img src={logo} className="App-logo" alt="logo" />
           </Link>
-
-          <Link className="navbar-item" to="/">
-            Главная
-          </Link>
           <Link className="navbar-item" to="/group">
-            Группы документов
+            Группы
           </Link>
           <Link className="navbar-item" to="/docs">
             Документы
@@ -23,7 +53,7 @@ function Navbar() {
 
           <div className="navbar-item has-dropdown is-hoverable">
             <a href="#." className="navbar-link">
-              More
+              1
             </a>
 
             <div className="navbar-dropdown">
@@ -41,6 +71,11 @@ function Navbar() {
                 Report an issue
               </a>
             </div>
+          </div>
+        </div>
+        <div className="navbar-end">
+          <div className="navbar-item">
+            <Greeting />
           </div>
         </div>
       </nav>
