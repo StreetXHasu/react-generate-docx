@@ -45,10 +45,10 @@ export default function Reg() {
       <div className="reg">
         <p className="notification is-success">{success.success}</p>
         <form onSubmit={handleSubmit}>
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
+          <div className="field">
+            <p className="control has-icons-left has-icons-right">
               <input
-                class="input"
+                className="input"
                 type="text"
                 name="userlogin"
                 placeholder="Логин"
@@ -60,18 +60,18 @@ export default function Reg() {
                   })
                 }
               />
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
+              <span className="icon is-small is-left">
+                <i className="fas fa-envelope"></i>
               </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
+              <span className="icon is-small is-right">
+                <i className="fas fa-check"></i>
               </span>
             </p>
           </div>
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
+          <div className="field">
+            <p className="control has-icons-left has-icons-right">
               <input
-                class="input"
+                className="input"
                 type="text"
                 name="username"
                 placeholder="Как вас зовут?"
@@ -83,18 +83,18 @@ export default function Reg() {
                   })
                 }
               />
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
+              <span className="icon is-small is-left">
+                <i className="fas fa-envelope"></i>
               </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
+              <span className="icon is-small is-right">
+                <i className="fas fa-check"></i>
               </span>
             </p>
           </div>
-          <div class="field">
-            <p class="control has-icons-left">
+          <div className="field">
+            <p className="control has-icons-left">
               <input
-                class="input"
+                className="input"
                 type="password"
                 name="userpassword"
                 placeholder="пароль"
@@ -106,14 +106,14 @@ export default function Reg() {
                   })
                 }
               />
-              <span class="icon is-small is-left">
-                <i class="fas fa-lock"></i>
+              <span className="icon is-small is-left">
+                <i className="fas fa-lock"></i>
               </span>
             </p>
           </div>
-          <div class="field">
-            <p class="control">
-              <button class="button is-success">Регистрация</button>
+          <div className="field">
+            <p className="control">
+              <button className="button is-success">Регистрация</button>
             </p>
           </div>
         </form>

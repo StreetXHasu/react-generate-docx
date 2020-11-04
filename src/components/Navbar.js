@@ -1,41 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../logo.svg";
+import Navbar_auth from "./Navbar_auth";
 
-function getCookieValue(a) {
-  var b = document.cookie.match("(^|;)\\s*" + a + "\\s*=\\s*([^;]+)");
-  return b ? b.pop() : "";
-}
-function Ghost() {
-  return (
-    <div className="buttons">
-      <Link className="button is-primary" to="/reg">
-        <strong>Регистрация</strong>
-      </Link>
-      <Link className="button is-light" to="/login">
-        Вход
-      </Link>
-    </div>
-  );
-}
-function Login() {
-  return (
-    <div className="buttons">
-      <Link className="button is-primary" to="/user">
-        <strong>Юзвер</strong>
-      </Link>
-      <Link className="button" to="/logout">
-        <strong>выйти</strong>
-      </Link>
-    </div>
-  );
-}
-function Greeting() {
-  if (getCookieValue("token").length >= 1) {
-    return <Login />;
-  }
-  return <Ghost />;
-}
 function Navbar() {
   return (
     <header className="App-header">
@@ -75,7 +42,7 @@ function Navbar() {
         </div>
         <div className="navbar-end">
           <div className="navbar-item">
-            <Greeting />
+            <Navbar_auth />
           </div>
         </div>
       </nav>

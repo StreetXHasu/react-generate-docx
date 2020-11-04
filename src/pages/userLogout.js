@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logout, selectUser } from "../components/Auth";
 function setCookie(name, value, options = {}) {
   options = {
     path: "/",
@@ -32,6 +34,7 @@ function deleteCookie(name) {
 
 export default function userLogout() {
   deleteCookie("token");
+
   return (
     <div className="userLogout">
       <p>Вы успешно вышли.</p>

@@ -144,7 +144,7 @@ function GroupOne() {
         </div>
         <div className="card m-2">
           <div className="card-content">
-            <table class="table">
+            <table className="table">
               <thead>
                 <tr>
                   <th>ID</th>

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logout, selectUser } from "../components/Auth";
 import makeRequest from "../components/makeRequest";
 import { Redirect } from "react-router-dom";
 
 export default function Login() {
+  const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState("");
   const [isRedirect, setIsRedirect] = useState(false);
@@ -25,21 +28,34 @@ export default function Login() {
       "application/json"
     ).then(({ data, ok, error }) => {
       if (ok) {
-        console.log("тест ", data);
-        let value = data.token;
+        if (!data.token) {
+          setSuccess(data.message);
+        } else {
+          console.log("тест эрор ", typeof data.token);
 
-        // кодирует в my%20name=John%20Smith
-        document.cookie =
-          encodeURIComponent("token") + "=" + encodeURIComponent(value);
+          let value = data.token;
 
-        setSuccess(data);
-        setIsRedirect(true);
+          // кодирует в my%20name=John%20Smith
+          dispatch(login());
+          document.cookie =
+            encodeURIComponent("token") + "=" + encodeURIComponent(value);
+
+          setIsRedirect(true);
+        }
       } else {
-        setError({ message: ` ${error}` });
+        setError(error);
       }
       setIsLoaded(true);
     });
   };
+
+  function Notification({ ok }) {
+    if (ok) {
+      return <p className="notification is-danger">{ok}</p>;
+    } else {
+      return "";
+    }
+  }
 
   if (error) {
     return <div>Ошибка: {error.message}</div>;
@@ -48,12 +64,12 @@ export default function Login() {
   } else {
     return (
       <div className="reg">
-        <p className="notification is-success">{success.success}</p>
+        {success && <p className="notification is-danger">{success}</p>}
         <form onSubmit={handleSubmit}>
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
+          <div className="field">
+            <p className="control has-icons-left has-icons-right">
               <input
-                class="input"
+                className="input"
                 type="text"
                 name="userlogin"
                 placeholder="Логин"
@@ -65,18 +81,18 @@ export default function Login() {
                   })
                 }
               />
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
+              <span className="icon is-small is-left">
+                <i className="fas fa-envelope"></i>
               </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
+              <span className="icon is-small is-right">
+                <i className="fas fa-check"></i>
               </span>
             </p>
           </div>
-          <div class="field">
-            <p class="control has-icons-left">
+          <div className="field">
+            <p className="control has-icons-left">
               <input
-                class="input"
+                className="input"
                 type="password"
                 name="userpassword"
                 placeholder="пароль"
@@ -88,14 +104,14 @@ export default function Login() {
                   })
                 }
               />
-              <span class="icon is-small is-left">
-                <i class="fas fa-lock"></i>
+              <span className="icon is-small is-left">
+                <i className="fas fa-lock"></i>
               </span>
             </p>
           </div>
-          <div class="field">
-            <p class="control">
-              <button class="button is-success">Вход</button>
+          <div className="field">
+            <p className="control">
+              <button className="button is-success">Вход</button>
             </p>
           </div>
         </form>
